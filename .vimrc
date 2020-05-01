@@ -2,7 +2,7 @@ set encoding=utf-8
 set nocompatible		" vi non-compatible
 set scrolloff=1
 set ai				" autoindent
-set mouse=a   " scroll text not cursor
+set mouse=n   " scroll text not cursor
 
 set number
 set ruler
@@ -19,6 +19,14 @@ set smartcase			" will not ignore case if there is an upper case letter
 " set backspace=indent,eol,start  "make backspace key work the way it should
 "
 set t_Co=256                            "Support 256 colors
+colorscheme elflord
+
+function! GnuIndent()
+  setlocal cinoptions=>4,n-2,{2,^-2,:2,=2,g0,h2,p5,t0,+2,(0,u0,w1,m1
+  setlocal shiftwidth=2
+  setlocal tabstop=4
+endfunction
+au FileType c,cpp call GnuIndent()
 
 filetype on
 filetype indent on
@@ -58,14 +66,15 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
-"--- Seamless indentation of blocks
-vnoremap < <gv
-vnoremap > >gv
-
+"--- Make cursor stay while rolling page
+nnoremap <C-e> <C-e>j
+nnoremap <C-y> <C-y>k
 
 nmap <SPACE> <Nop>
 let mapleader="\<Space>"
 let maplocalleader="\<Space>"
+
+set backupdir=~/.vim/tmp,.
 
 " let mapleander = "\<Space>"
 " map <SPACE> <leader>
@@ -116,10 +125,12 @@ let maplocalleader="\<Space>"
 
 " Plugin manager
 call plug#begin('~/.vim/plugged')
-  Plug 'arcticicestudio/nord-vim' " Nord theme
-"   Plug 'vim-airline/vim-airline'  " Status bar
-  Plug 'tpope/vim-unimpaired'     " Shortcuts from tpope
-  Plug 'tpope/vim-surround'     " Shortcuts from tpope
+  Plug 'arcticicestudio/nord-vim'                          " Nord theme
+  Plug 'vim-airline/vim-airline'                         " Status bar
+    let g:airline_powerline_fonts = 1
+  Plug 'vim-airline/vim-airline-themes'
+  Plug 'tpope/vim-unimpaired'                              " Shortcuts from tpope
+  Plug 'tpope/vim-surround'                                " Shortcuts from tpope
   Plug 'lervag/vimtex'
     let g:tex_flavor  = "latex"
   Plug 'KeitaNakamura/tex-conceal.vim'
@@ -129,10 +140,22 @@ call plug#begin('~/.vim/plugged')
     let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'    
     let g:UltiSnipsSnippetDirectories=["UltiSnips"]    
     let g:UltiSnipsEditSplit="vertical"
- "--- For editting snippets
+    "--- For editting snippets
     nmap <leader>te :UltiSnipsEdit<cr>
     nmap <leader>tr :call UltiSnips#RefreshSnippets()<cr>
   Plug 'tpope/vim-fugitive'
+  Plug 'chiel92/vim-autoformat'
+    "--- For allow project settings 
+    let g:formatters_cpp = ['custom_astyle_cpp']
+    let g:formatdef_custom_astyle_cpp = '"astyle --project"'
+    nnoremap <leader>pf :Autoformat<CR>
+  Plug 'preservim/nerdtree'
+    nnoremap <C-n> :NERDTreeToggle<CR>
+  " Plug 'vim-scripts/Conque-GDB'
+    "--- display warning messages if conqueTerm is configured incorrectly  
+    " let g:ConqueTerm_StartMessages = 0 
+
+
   "--- Unused plugins
   " Plug 'honza/vim-snippets'  "--- Snippets repo: keep for examples
   " Plug 'chrisbra/vim-commentary'  " Comments plugin
