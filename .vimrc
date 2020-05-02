@@ -137,7 +137,18 @@ set backupdir=~/.vim/tmp,.
 "==============================================================================
 "        Plugins
 "==============================================================================
+" Setup directories and vim-plug {{{
 
+if !filereadable($HOME . '/.vim/autoload/plug.vim')
+    silent !mkdir -p ~/.vim/autoload >/dev/null 2>&1
+    silent !mkdir -p ~/.vim/plugged >/dev/null 2>&1
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+                \ >/dev/null 2>&1
+    autocmd VimEnter * PlugInstall
+endif
+
+" }}}
 " Plugin manager
 call plug#begin('~/.vim/plugged')
   Plug 'arcticicestudio/nord-vim'                          " Nord theme
