@@ -11,7 +11,7 @@ set autoread
 
 set hlsearch
 set incsearch
-set showmatch 
+set showmatch
 
 set ignorecase
 set smartcase			" will not ignore case if there is an upper case letter
@@ -38,21 +38,36 @@ set clipboard=unnamedplus
 
 highlight Search ctermfg=white
 highlight Search ctermbg=red
+"
+" autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 
 "--- Switching syntax off for large files
-syntax on 
+syntax on
 autocmd BufWinEnter * if line2byte(line("$") + 1) > 500000 | syntax clear | endif
 
 set wildmode=longest,list
 set history=200
-cnoremap <C-p> <Up>
-cnoremap <C-n> <Down>
+" cnoremap <C-p> <Up>
+" cnoremap <C-n> <Down>
 
 "--- Transversing vim buffer list
 nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
+
+"--- Highlight trailing whitespace
+highlight ExtraWhitespace ctermbg=brown guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * call clearmatches()
+autocmd BufWinLeave * call clearmatches()
+
+"--- Remove trailing whitespace
+nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
+
+set foldmethod=manual
 
 "--- Easier split screen transformation (not working)
 " nnoremap <M-j>    :resize -2<CR>
@@ -117,10 +132,10 @@ set backupdir=~/.vim/tmp,.
 " augroup END
 " Ctrl+L corrects last spelling error:
 " imap <C-l> <Esc>ml[s1z=`la
-   
-   
+
+
 "==============================================================================
-"        Plugins 
+"        Plugins
 "==============================================================================
 
 " Plugin manager
@@ -134,26 +149,46 @@ call plug#begin('~/.vim/plugged')
   Plug 'lervag/vimtex'
     let g:tex_flavor  = "latex"
   Plug 'KeitaNakamura/tex-conceal.vim'
-  Plug 'SirVer/ultisnips'    "Snippets engine 
+  Plug 'SirVer/ultisnips'    "Snippets engine
     let g:UltiSnipsExpandTrigger = "<tab>"
-    let g:UltiSnipsJumpForwardTrigger = '<tab>'    
-    let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'    
-    let g:UltiSnipsSnippetDirectories=["UltiSnips"]    
+    let g:UltiSnipsJumpForwardTrigger = '<tab>'
+    let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
+    let g:UltiSnipsSnippetDirectories=["UltiSnips"]
     let g:UltiSnipsEditSplit="vertical"
     "--- For editting snippets
     nmap <leader>te :UltiSnipsEdit<cr>
     nmap <leader>tr :call UltiSnips#RefreshSnippets()<cr>
   Plug 'tpope/vim-fugitive'
   Plug 'chiel92/vim-autoformat'
-    "--- For allow project settings 
+    "--- For allow project settings
     let g:formatters_cpp = ['custom_astyle_cpp']
     let g:formatdef_custom_astyle_cpp = '"astyle --project"'
     nnoremap <leader>pf :Autoformat<CR>
   Plug 'preservim/nerdtree'
     nnoremap <C-n> :NERDTreeToggle<CR>
+  Plug 'tpope/vim-dispatch'                     " Asynchronous Make procedure
+  Plug 'chrisbra/colorizer'                     " Render hex colors
+  "--- Figure out how to use
+  Plug 'mhinz/vim-grepper'                      " Universal async too for grep operations
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+    nnoremap <C-p> :<C-u>FZF<CR>
+    nnoremap <leader>s :<C-u>FZF<CR>
+  " Plug 'airblade/vim-gitgutter'
+  "  set updatetime=100
+  Plug 'mhinz/vim-signify'
+    " let g:signify_line_highlight = 0
+  " Plug 'dense-analysis/ale' " linter
+  "   nmap <silent> [W <Plug>(ale_first)
+  "   nmap <silent> [w <Plug>(ale_previous)
+  "   nmap <silent> ]w <Plug>(ale_next)
+  "   nmap <silent> ]W <Plug>(ale_last)
+  "
+  " Setting the g:ale_linters variable this way means t
+
+  " let g:colorizer_auto_color = 1
   " Plug 'vim-scripts/Conque-GDB'
-    "--- display warning messages if conqueTerm is configured incorrectly  
-    " let g:ConqueTerm_StartMessages = 0 
+    "--- display warning messages if conqueTerm is configured incorrectly
+    " let g:ConqueTerm_StartMessages = 0
 
 
   "--- Unused plugins
@@ -162,4 +197,4 @@ call plug#begin('~/.vim/plugged')
 
 
 call plug#end()
- 
+
