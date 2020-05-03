@@ -187,6 +187,26 @@ call plug#begin('~/.vim/plugged')
   " Plug 'airblade/vim-gitgutter'
   "  set updatetime=100
   Plug 'mhinz/vim-signify'
+    let g:signify_sign_add               = '+'
+    let g:signify_sign_delete            = '-'
+    let g:signify_sign_delete_first_line = '‾'
+    let g:signify_sign_change            = '~'
+    highlight link SignifyLineAdd             DiffAdd
+    highlight link SignifyLineChange          DiffChange
+    highlight link SignifyLineDelete          DiffDelete
+    highlight link SignifyLineDeleteFirstLine SignifyLineDelete
+    highlight link SignifySignAdd             DiffAdd
+    highlight link SignifySignChange          DiffChange
+    highlight link SignifySignDelete          DiffDelete
+    highlight link SignifySignDeleteFirstLine SignifySignDelete
+
+    let g:signify_sign_show_text = 1
+    highlight SignColumn ctermbg=NONE cterm=NONE guibg=NONE gui=NONE
+    highlight SignifySignAdd    ctermfg=green  ctermbg=NONE
+    highlight SignifySignDelete ctermfg=red  ctermbg=NONE
+    highlight SignifySignChange ctermfg=yellow  ctermbg=NONE
+    highlight link SignifyLineChange DiffText
+
     " let g:signify_line_highlight = 0
   " Plug 'dense-analysis/ale' " linter
   "   nmap <silent> [W <Plug>(ale_first)
@@ -197,8 +217,6 @@ call plug#begin('~/.vim/plugged')
   " Setting the g:ale_linters variable this way means t
 
   " let g:colorizer_auto_color = 1
-  " Plug 'vim-scripts/Conque-GDB'
-    "--- display warning messages if conqueTerm is configured incorrectly
     " let g:ConqueTerm_StartMessages = 0
 
 
