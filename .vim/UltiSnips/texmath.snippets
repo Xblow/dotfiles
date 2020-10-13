@@ -10,9 +10,9 @@ def create_matrix(snip):
 	mx_type = snip.buffer[snip.line].strip()[0]
 	row_len = int(''.join(s for s in snip.buffer[snip.line] if s.isdigit()))
 	old_spacing = snip.buffer[snip.line][:snip.buffer[snip.line].rfind(' ') + 1]
-	
+
 	snip.buffer[snip.line] = ''
-	
+
 	final_str = old_spacing + "\\begin{" + mx_type + "matrix}\n"
 
 	for i in range(row_len):
@@ -27,9 +27,9 @@ def create_matrix(snip):
 def create_vector(snip):
 	col_len = int(''.join(s for s in snip.buffer[snip.line] if s.isdigit()))
 	old_spacing = snip.buffer[snip.line][:snip.buffer[snip.line].rfind(' ') + 1]
-	
+
 	snip.buffer[snip.line] = ''
-	
+
 	final_str = old_spacing + "\\begin{pmatrix}\n"
 
 	for i in range(col_len):
@@ -41,11 +41,11 @@ def create_vector(snip):
 	snip.expand_anon(final_str)
 endglobal
 
-pre_expand "create_matrix(snip)" 
+pre_expand "create_matrix(snip)"
 snippet "[pbBvV]mx(\d)" "Generate n x n pmatrix" rA
 endsnippet
 
-pre_expand "create_vector(snip)" 
+pre_expand "create_vector(snip)"
 snippet "vec(\d)" "Generate d-dimensional vector" rA
 endsnippet
 
@@ -229,7 +229,7 @@ endsnippet
 snippet cases "cases" "isMath()" be
 \begin{cases}
 	$1, & \\text{if } $2 \\\\
-	$3, & \\text{if } $4 
+	$3, & \\text{if } $4
 \end{cases}
 endsnippet
 
@@ -562,7 +562,7 @@ snippet form "set of forms" "isMath()" Awe
 \Lambda^{${1:p}}(\mathcal{M})$0
 endsnippet
 
-snippet Mat "set of matrices" "isMath()" Awe 
+snippet Mat "set of matrices" "isMath()" Awe
 \text{Mat}_n(F)
 endsnippet
 
@@ -589,21 +589,21 @@ endsnippet
 priority -100
 
 snippet "(_|\^)([a-zA-Z0-9])" "sub-super swap" "isMath()" er
-`!p 
+`!p
 indicator={"_", "^"} - {match.group(1)}
 snip.rv=indicator.pop()+match.group(2)
 `
 endsnippet
 
 snippet "(_|\^)({.*?})" "sub-super swap:braces" "isMath()" er
-`!p 
+`!p
 indicator={"_", "^"} - {match.group(1)}
 snip.rv=indicator.pop()+match.group(2)
 `
 endsnippet
 
 snippet "(_|\^)(\\[a-z]*)" "sub-super swap: command" "isMath()" er
-`!p 
+`!p
 indicator={"_", "^"} - {match.group(1)}
 snip.rv=indicator.pop()+match.group(2)
 `
@@ -803,7 +803,7 @@ endsnippet
 
 priority -100
 snippet '(.)([a-zA-Z]|}|\))(\d)' "Auto Index" "isMath()" eAr
-`!p 
+`!p
 # The following line prevents \c1 -> \c_1 for simpler-wick
 if match.group(1) == "\\":
   snip.rv=match.group(0)
@@ -813,11 +813,11 @@ endsnippet
 
 priority 50
 
-snippet '(_|\^)(\d)(\d)' "Auto Second Index" "isMath()" eAr
-`!p 
-indicator={"_", "^"} - {match.group(1)}
-snip.rv = match.group(1) + match.group(2) + indicator.pop() + match.group(3)`
-endsnippet
+# snippet '(_|\^)(\d)(\d)' "Auto Second Index" "isMath()" eAr
+# `!p
+# indicator={"_", "^"} - {match.group(1)}
+# snip.rv = match.group(1) + match.group(2) + indicator.pop() + match.group(3)`
+# endsnippet
 
 #snippet '([a-zA-Z])_(\d\d)' "Auto Multi Index" "isMath()" eAwr
 #`!p snip.rv = match.group(1) + "_{" + match.group(2) + "}"`
