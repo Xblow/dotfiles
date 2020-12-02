@@ -18,7 +18,7 @@ set shiftwidth=2		                  " when indenting with '>', use 4 spaces widt
 set expandtab 			                  " on pressing tab, insert 4 spaces
 set ignorecase		                    " reset to ignore case
 set smartcase		  	                  " ignore case only if no capital letters
-set foldmethod=marker                 " fond using {{{ }}} markers
+" set foldmethod=marker               " fond using {{{ }}} markers
 set updatetime=300                    " faster completion
 set clipboard=unnamedplus
 set incsearch
@@ -26,6 +26,8 @@ if &co > 80                           " if terminal shows 80+ lines
   set number                          " display line numbers
 endif
 set hidden                            " have full undo history
+" let &titlestring = @%
+" set title
                                       "     (gets hidden after buffer change)
 set tags=tags;                        " command `;` makes vim search for tags file
                                       "     in the upper directories
