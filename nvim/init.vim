@@ -12,12 +12,12 @@
 set nocompatible
 set backspace=indent,eol,start
 set ruler
-set history=200		                    " command line history
-set tabstop=2  			                  " show existing tab # spaces width
-set shiftwidth=2		                  " when indenting with '>', use 4 spaces width
-set expandtab 			                  " on pressing tab, insert 4 spaces
-set ignorecase		                    " reset to ignore case
-set smartcase		  	                  " ignore case only if no capital letters
+set history=200                       " command line history
+set tabstop=2                         " show existing tab # spaces width
+set shiftwidth=2                      " when indenting with '>', use 4 spaces width
+set expandtab                         " on pressing tab, insert 4 spaces
+set ignorecase                        " reset to ignore case
+set smartcase                         " ignore case only if no capital letters
 " set foldmethod=marker               " fond using {{{ }}} markers
 set updatetime=300                    " faster completion
 set clipboard=unnamedplus
@@ -26,10 +26,14 @@ if &co > 80                           " if terminal shows 80+ lines
   set number                          " display line numbers
 endif
 set hidden                            " have full undo history
+set nowrapscan                        " stop search at bottom
 " let &titlestring = @%
 " set title
                                       "     (gets hidden after buffer change)
 set tags=tags;                        " command `;` makes vim search for tags file
+" set list listchars=nbsp:¬,tab:»·,trail:·,extends:>
+" set list listchars=nbsp:¬,trail:·,extends:>
+" set diffopt+=iwhite                 " Ignore whitespace whilst diffing
                                       "     in the upper directories
 "--- Switching syntax off for large files
 autocmd BufWinEnter * if line2byte(line("$") + 1) > 500000 | syntax clear | endif
@@ -99,6 +103,12 @@ vnoremap <C-e> <C-e>j
 nnoremap <C-y> <C-y>k
 vnoremap <C-y> <C-y>k
 
+"--- Limit quickfix window height
+au FileType qf call AdjustWindowHeight(5, 12)
+function! AdjustWindowHeight(minheight, maxheight)
+  exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
+endfunction
+
 "--- Declare <Space> as leader key
 nmap <SPACE> <Nop>
 let mapleader="\<Space>"
@@ -113,6 +123,7 @@ nnoremap <expr> <leader>hr (&relativenumber ? ':set norelativenumber'
                                            \: ':set relativenumber')."\n"
 nnoremap <expr> <leader>hn (&number ? ':set nonumber'
                                    \: ':set number')."\n"
+nnoremap <expr> <leader>hw (&wrap ? ':set nowrap' : ':set wrap')."\n"
 " if filereadable($HOME/.config/nvim/scripts/HighlightWhitespace.vim)
 source $HOME/.config/nvim/scripts/HighlightWhitespace.vim
     nnoremap <silent> <leader>hs :call ToggleHighlightWhitespace()<cr>
@@ -135,6 +146,12 @@ endif
 " nnoremap <A-j> <C-w>j
 " nnoremap <A-k> <C-w>k
 " nnoremap <A-l> <C-w>l
+
+" Open file if doesn't exist
+noremap <leader>gf :tabe <cfile><cr>
+
+" Open neovimrc (this file)
+nnoremap <leader>ev :tabe $MYVIMRC<cr>
 
 "--- Open terminal in nvim
 if has('nvim')
@@ -172,13 +189,16 @@ source $HOME/.config/nvim/rc/easymotion.vim            " jump around file
 source $HOME/.config/nvim/rc/quick-scope.vim           " jump around file
 source $HOME/.config/nvim/rc/lightline.vim             " light status bar
 source $HOME/.config/nvim/rc/which-key.vim             " leader key shortcuts helper
-source $HOME/.config/nvim/rc/undotree.vim             " leader key shortcuts helper
+source $HOME/.config/nvim/rc/undotree.vim              " leader key shortcuts helper
 Plug 'adelarsq/vim-matchit'                            " match brackets & tags
 Plug 'frazrepo/vim-rainbow'                            " brackets individual colouring
 Plug 'ryanoasis/vim-devicons'                          " cool icons to plugins
 Plug 'vim-scripts/ScrollColors'                        " change themes with SCROLL
 Plug 'christoomey/vim-tmux-navigator'                  " switch windows with Ctrl-motion
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'stsewd/fzf-checkout.vim'
+Plug 'tommcdo/vim-exchange'
+source $HOME/.config/nvim/rc/ale.vim
+" ============================
 
 call plug#end()
 " }}}
