@@ -19,6 +19,7 @@ let g:vimtex_view_method = 'zathura'
 "
 "===== Spell checking ====
 setlocal spell spelllang=en_gb " switch on spell checking
+set nospell
 hi clear SpellBad
 hi SpellBad cterm=underline
 " set spelllang=en_gb  "--- Fix the problem with cyan hi

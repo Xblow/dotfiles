@@ -4,8 +4,10 @@ Plug 'tpope/vim-fugitive'
      nnoremap <leader>gS :Git<cr>
      nnoremap <leader>gl :Glog<cr>
      nnoremap <leader>gc :Git commit<cr>
+     " nnoremap <leader>gC :Git commit --amend<cr>
      nnoremap <leader>gd :Gdiff<cr>
      nnoremap <leader>gB :Git branch -a<cr>
      nnoremap <leader>gh :Commits<cr>
      nnoremap <leader>gbh :BCommits<cr>
+     nnoremap <leader>gbb :Git blame<cr>
 

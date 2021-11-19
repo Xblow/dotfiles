@@ -1,6 +1,7 @@
 Plug 'junegunn/fzf.vim'
    " general
    nnoremap <leader>F  :Files<cr>
+   nnoremap <leader>ff :Files %:p:h<cr>
    nnoremap <leader>fs :Snippets<cr>
    nnoremap <leader>fh :Helptags<cr>
    nnoremap <leader>H  :History:<cr>
@@ -37,6 +38,9 @@ Plug 'junegunn/fzf.vim'
                         \ 'xoffset': 0.5,
                         \ 'border': 'rounded' } }
    " let g:fzf_layout = { 'down': '40%' }
+   "
+   autocmd! FileType fzf tnoremap <buffer> <esc> <c-c>
 
+   " command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
 

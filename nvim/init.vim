@@ -55,6 +55,9 @@ function! GnuIndent()
   setlocal tabstop=4
 endfunction
 au FileType c,cpp call GnuIndent()
+" autocmd BufNewFile,BufRead *.md set filetype=markdown
+" autocmd FileType markdown set conceallevel=2
+" autocmd FileType markdown setlocal spell spelllang=en_gb
 " }}}
 " Backups, History, Swaps {{{
 " ======================
@@ -198,6 +201,12 @@ Plug 'christoomey/vim-tmux-navigator'                  " switch windows with Ctr
 Plug 'stsewd/fzf-checkout.vim'
 Plug 'tommcdo/vim-exchange'
 source $HOME/.config/nvim/rc/ale.vim
+source $HOME/.config/nvim/rc/blamer.vim                " run git blame on lines akin to vscode
+Plug 'moll/vim-bbye'                                   " optional dependency for vim-symlink
+Plug 'aymericbeaumet/vim-symlink'                      " follow symlinks
+source $HOME/.config/nvim/rc/nerdtree.vim              " file manager
+Plug 'chiedo/vim-case-convert'                         " camel to snake case and back
+Plug 'tpope/vim-obsession'                             " accompaniment to tmux-resurrect
 " ============================
 
 call plug#end()

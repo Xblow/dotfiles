@@ -97,42 +97,55 @@ snippet al* "Array without number" b
 \end{align*}
 endsnippet
 
-snippet frac "Fraction" wA
-\frac{${1:${VISUAL:nom}}}{${2:denom}}
-endsnippet
-
-snippet frac* "Flat Fraction" wA
-\flatfrac{${1:${VISUAL:nom}}}{${2:denom}}
-endsnippet
+# snippet frac* "Flat Fraction" wA
+# \flatfrac{${1:${VISUAL:1}}}{${2:denom}}
+# endsnippet
 
 
 # Snippets that use isMath()
 
 global !p
-texMathZones = ['texMathZone'+x for x in ['A', 'AS', 'B', 'BS', 'C', 'CS', 'D', 'DS', 'V', 'W', 'X', 'Y', 'Z']]
-# If you have http://www.drchip.org/astronaut/vim/vbafiles/amsmath.vba.gz,
-# you want to add:
-texMathZones += ['texMathZone'+x for x in ['E', 'ES', 'F', 'FS', 'G', 'GS', 'H', 'HS', 'I', 'IS', 'J', 'JS', 'K', 'KS', 'L', 'LS']]
-texIgnoreMathZones = ['texMathText']
-
-texMathZoneIds = vim.eval('map('+str(texMathZones)+", 'hlID(v:val)')")
-texIgnoreMathZoneIds = vim.eval('map('+str(texIgnoreMathZones)+", 'hlID(v:val)')")
-
 def isMath():
-    synstackids = vim.eval("synstack(line('.'), col('.') - (col('.')>=2 ? 1 : 0))")
-    if not set(texIgnoreMathZoneIds).isdisjoint(synstackids):
-        return False
-    return not set(texMathZoneIds).isdisjoint(synstackids)
-    # isdisjoint() can short-circuit as soon as a match is found
+    return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+
+def isComment():
+    return vim.eval('vimtex#syntax#in_comment()') == '1'
+
+def env(name):
+    [x,y] = vim.eval("vimtex#env#is_inside('" + name + "')")
+    return x != '0' and x != '0'
 endglobal
+
+# context "isMath()"
+# snippet sr "^2" iA
+# ^2
+# endsnippet
+
+# global !p
+# texMathZones = ['texMathZone'+x for x in ['A', 'AS', 'B', 'BS', 'C', 'CS', 'D', 'DS', 'V', 'W', 'X', 'Y', 'Z']]
+# # If you have http://www.drchip.org/astronaut/vim/vbafiles/amsmath.vba.gz,
+# # you want to add:
+# texMathZones += ['texMathZone'+x for x in ['E', 'ES', 'F', 'FS', 'G', 'GS', 'H', 'HS', 'I', 'IS', 'J', 'JS', 'K', 'KS', 'L', 'LS']]
+# texIgnoreMathZones = ['texMathText']
+#
+# texMathZoneIds = vim.eval('map('+str(texMathZones)+", 'hlID(v:val)')")
+# texIgnoreMathZoneIds = vim.eval('map('+str(texIgnoreMathZones)+", 'hlID(v:val)')")
+#
+# def isMath():
+#     synstackids = vim.eval("synstack(line('.'), col('.') - (col('.')>=2 ? 1 : 0))")
+#     if not set(texIgnoreMathZoneIds).isdisjoint(synstackids):
+#         return False
+#     return not set(texMathZoneIds).isdisjoint(synstackids)
+#     # isdisjoint() can short-circuit as soon as a match is found
+# endglobal
 
 priority 100
 
 # Textmode synippets requiring isMath()
 
-snippet ^ "Textmode Superscript" "not isMath()" eAi
-\textsuperscript{${1:${VISUAL}}}$0
-endsnippet
+# snippet ^ "Textmode Superscript" "not isMath()" eAi
+# \textsuperscript{${1:${VISUAL}}}$0
+# endsnippet
 
 # Mathmode snippets
 
@@ -142,8 +155,8 @@ priority 100
 #\dots
 #endsnippet
 
-snippet ... "dots" A
-\dots
+snippet ... "ldots" A
+\ldots
 endsnippet
 
 snippet +- "plus minus" Aw
@@ -238,24 +251,24 @@ endsnippet
 #endsnippet
 
 snippet int "Integration" "isMath()" ew
-\int_{${1:-\infty}}^{${2:\infty}}${VISUAL}\\$3dd[${4:d}]{${5:x}} $0
+\int_{${1:-\infty}}^{${2:\infty}}${VISUAL}\\${3:d}{${5:x}}\, $0
 endsnippet
 
-snippet ppp "momentum" "isMath()" eiA
-_{\vb{p}}
-endsnippet
-
-snippet ppi "momentum" "isMath()" eiA
-_{\vb{p}'}
-endsnippet
-
-snippet qqq "momentum" "isMath()" eiA
-_{\vb{q}}
-endsnippet
-
-snippet qqi "momentum" "isMath()" eiA
-_{\vb{q}'}
-endsnippet
+# snippet ppp "momentum" "isMath()" eiA
+# _{\vb{p}}
+# endsnippet
+#
+# snippet ppi "momentum" "isMath()" eiA
+# _{\vb{p}'}
+# endsnippet
+#
+# snippet qqq "momentum" "isMath()" eiA
+# _{\vb{q}}
+# endsnippet
+#
+# snippet qqi "momentum" "isMath()" eiA
+# _{\vb{q}'}
+# endsnippet
 
 snippet 'kk(\d)' "labeled momentum" "isMath()" eiAr
 _{\vb{k}_`!p snip.rv=match.group(1)`}
@@ -317,6 +330,10 @@ snippet cc "dot product" "isMath()" Awe
 \cdot
 endsnippet
 
+# snippet ** "dot product" "isMath()" A
+# \cdot
+# endsnippet
+#
 snippet ss "hodge star" "isMath()" Awe
 \star
 endsnippet
@@ -341,6 +358,14 @@ endsnippet
 
 snippet SS "summation" "isMath()" Awe
 \sum_{${1:i=1}}^{${2:\infty}}$0
+endsnippet
+
+snippet sum "basic sum" "isMath()" Awe
+\sum$0
+endsnippet
+
+snippet '([^\\])text' "inserted text" "isMath()" Are
+`!p snip.rv=match.group(0)[0]`\text{$1}$0
 endsnippet
 
 # Derivatives
@@ -407,23 +432,52 @@ snippet ind "tensor indices" "isMath()" ewA
 \indices{$1}$0
 endsnippet
 
-snippet lim "limes" "isMath()" ewA
-\lim_{${1:n} \to ${2:\infty}} \left\\{ $3 \right\\}
-endsnippet
+# snippet lim "limes" "isMath()" ewA
+# \lim_{${1:n} \to ${2:\infty}} \left\\{ $3 \right\\}
+# endsnippet
 
 snippet par "differential operator" "isMath()" ewA
 \partial
 endsnippet
 
-snippet nab "nabla" "isMath()" ewA
-\nabla
-endsnippet
+# snippet dag "dagger" "isMath()" ewA
+# snippet '[^\]dag' "dagger" "isMath()" ewrA
+# \dagger
+# endsnippet
+
+# snippet '[A-Za-z]herm' "hermitian conjugation (dagger)" "isMath()" erA
+# `!p snip.rv=match.group(1)`^\dagger $0
+# endsnippet
+
+# snippet nab "nabla" "isMath()" ewA
+# \nabla
+# endsnippet
 
 snippet inf "infinity" "isMath()" eAw
 \infty
 endsnippet
 
+snippet 'sl([A-Za-z])' "slashed vector" "isMath()" erw
+\slashed{`!p snip.rv=match.group(1)`}$0
+endsnippet
+
+snippet sp "scalar product" "isMath()" ewA
+(${1:a}\cdot ${2:b})$0
+endsnippet
+
 # functions
+
+snippet frac "Fraction" "isMath()" weA
+\frac{${1:${VISUAL:1}}}{${2:denom}}
+endsnippet
+
+snippet cos "cosine" "isMath()" Aew
+\cos$0
+endsnippet
+
+snippet sin "sine" "isMath()" Aew
+\sin$0
+endsnippet
 
 snippet cs "cosin" "isMath()" ew
 \cos($1)$0
@@ -433,7 +487,7 @@ snippet ch "cosin hyperbolicus" "isMath()" ew
 \cosh($1)$0
 endsnippet
 
-snippet tn "tangens" "isMath()" ew
+snippet tg "tangens" "isMath()" ew
 \tan($1)$0
 endsnippet
 
@@ -486,17 +540,17 @@ else:
 `
 endsnippet
 
-snippet ( "parentheses" iA
-(${1:${VISUAL}})$0
-endsnippet
+# snippet ( "parentheses" iA
+# (${1:${VISUAL}})$0
+# endsnippet
 
-snippet { "braces" iA
-{${1:${VISUAL}}}$0
-endsnippet
+# snippet { "braces" iA
+# {${1:${VISUAL}}}$0
+# endsnippet
 
-snippet [ "brackets" iA
-[${1:${VISUAL}}]$0
-endsnippet
+# snippet [ "brackets" iA
+# [${1:${VISUAL}}]$0
+# endsnippet
 
 snippet <> "angular brackets" iA
 \langle ${1:${VISUAL}} \rangle$0
@@ -506,6 +560,14 @@ priority 1
 
 snippet lr( "left( right)" wA
 \left( ${1:${VISUAL}} \right)
+endsnippet
+
+snippet (( "left( right)" wA
+\left( ${1:${VISUAL}} \right)
+endsnippet
+
+snippet [[ "left[ right]" wA
+\left[ ${1:${VISUAL}} \right]
 endsnippet
 
 snippet lr| "left| right|" wA
@@ -530,11 +592,11 @@ snippet abs "absolute value" "isMath()" Aew
 \abs{$1}$0
 endsnippet
 
-snippet bra "bra" "isMath()" Aew
+snippet bra "bra" "isMath()" ew
 \bra{$1}$0
 endsnippet
 
-snippet ket "ket" "isMath()" Aew
+snippet ket "ket" "isMath()" ew
 \ket{$1}$0
 endsnippet
 
@@ -588,26 +650,26 @@ endsnippet
 
 priority -100
 
-snippet "(_|\^)([a-zA-Z0-9])" "sub-super swap" "isMath()" er
-`!p
-indicator={"_", "^"} - {match.group(1)}
-snip.rv=indicator.pop()+match.group(2)
-`
-endsnippet
+# snippet "(_|\^)([a-zA-Z0-9])" "sub-super swap" "isMath()" er
+# `!p
+# indicator={"_", "^"} - {match.group(1)}
+# snip.rv=indicator.pop()+match.group(2)
+# `
+# endsnippet
 
-snippet "(_|\^)({.*?})" "sub-super swap:braces" "isMath()" er
-`!p
-indicator={"_", "^"} - {match.group(1)}
-snip.rv=indicator.pop()+match.group(2)
-`
-endsnippet
-
-snippet "(_|\^)(\\[a-z]*)" "sub-super swap: command" "isMath()" er
-`!p
-indicator={"_", "^"} - {match.group(1)}
-snip.rv=indicator.pop()+match.group(2)
-`
-endsnippet
+# snippet "(_|\^)({.*?})" "sub-super swap:braces" "isMath()" er
+# `!p
+# indicator={"_", "^"} - {match.group(1)}
+# snip.rv=indicator.pop()+match.group(2)
+# `
+# endsnippet
+#
+# snippet "(_|\^)(\\[a-z]*)" "sub-super swap: command" "isMath()" er
+# `!p
+# indicator={"_", "^"} - {match.group(1)}
+# snip.rv=indicator.pop()+match.group(2)
+# `
+# endsnippet
 
 # --- GREEK INDICES ---
 
@@ -662,59 +724,59 @@ indices = {
   "|": "|",
   ";": ";",
   ",": ",",
-  "'": "'",
+  "'": "\\prime",
 }
 endglobal
 
-priority 49
-# greek and other indices with '.'
-snippet "\.([a-zA-Z\[\]\(\),;+-\|]{1,2})" "indices with dot" "isMath()" eiAr
-`!p
-if match.group(1) not in indices.keys():
-  snip.rv=match.group(0)
-else:
-  snip.rv="^{"+indices[match.group(1)]+"}"
-`
-endsnippet
-
-priority 50
-# tensor indices with '..'
-snippet "\.{2}([a-zA-Z\[\]\(\),;+-\|]{1,2})" "indices with dot" "isMath()" eiAr
-\indices{^{`!p
-if match.group(1) not in indices.keys():
-  snip.rv=match.group(0)
-else:
-  snip.rv=indices[match.group(1)]
-`}$1}$0
-endsnippet
-
-priority 51
-#higher prority than "multi indices"
-snippet "(\^|_)({.*)(,|;)};" "switch partial covariant derivative" "isMath()" eiAr
-`!p
-indicator={",", ";"} - {match.group(3)}
-snip.rv=match.group(1)+match.group(2)+indicator.pop()+"}"
-`
-endsnippet
-
-priority 50
-# add greek letters: {\mu}n -> {\mu\nu}
-# add derivatives: {\mu},r -> {\mu,\rho}
-# added primes
-snippet "(\^|_)({.*?)(,|;|\\[a-z]*?|\[|\]|\|)}([a-zA-Z\[\];\|']{1,2})" "multi indices" "isMath()" eiAr
-`!p
-# check if new thing is a valid index
-# If not, just return the whole match
-# i.e. do not change anything
-if match.group(4) not in indices.keys() or match.group(3) not in indices.values():
-  snip.rv=match.group(0)
-else:
-  index=indices[match.group(4)]
-
-  # insert new index letter into the braces
-  snip.rv= match.group(1)+ match.group(2) + match.group(3) + index + "}"
-`
-endsnippet
+# priority 49
+# # greek and other indices with '.'
+# snippet "\.([a-zA-Z\[\]\(\),;+-\|]{1,2})" "indices with dot" "isMath()" eiAr
+# `!p
+# if match.group(1) not in indices.keys():
+#   snip.rv=match.group(0)
+# else:
+#   snip.rv="^{"+indices[match.group(1)]+"}"
+# `
+# endsnippet
+#
+# priority 50
+# # tensor indices with '..'
+# snippet "\.{2}([a-zA-Z\[\]\(\),;+-\|]{1,2})" "indices with dot" "isMath()" eiAr
+# \indices{^{`!p
+# if match.group(1) not in indices.keys():
+#   snip.rv=match.group(0)
+# else:
+#   snip.rv=indices[match.group(1)]
+# `}$1}$0
+# endsnippet
+#
+# priority 51
+# #higher prority than "multi indices"
+# snippet "(\^|_)({.*)(,|;)};" "switch partial covariant derivative" "isMath()" eiAr
+# `!p
+# indicator={",", ";"} - {match.group(3)}
+# snip.rv=match.group(1)+match.group(2)+indicator.pop()+"}"
+# `
+# endsnippet
+#
+# priority 50
+# # add greek letters: {\mu}n -> {\mu\nu}
+# # add derivatives: {\mu},r -> {\mu,\rho}
+# # added primes
+# snippet "(\^|_)({.*?)(,|;|\\[a-z]*?|\[|\]|\|)}([a-zA-Z\[\];\|']{1,2})" "multi indices" "isMath()" eiAr
+# `!p
+# # check if new thing is a valid index
+# # If not, just return the whole match
+# # i.e. do not change anything
+# if match.group(4) not in indices.keys() or match.group(3) not in indices.values():
+#   snip.rv=match.group(0)
+# else:
+#   index=indices[match.group(4)]
+#
+#   # insert new index letter into the braces
+#   snip.rv= match.group(1)+ match.group(2) + match.group(3) + index + "}"
+# `
+# endsnippet
 
 # Latin indices with ','
 # priority higher than greek indices
@@ -752,9 +814,9 @@ snippet '[a-zA-Z]SCR' "Super CuRly" "isMath()" erA
 \mathscr{`!p snip.rv=match.group(0)[0]`}
 endsnippet
 
-snippet '[a-zA-Z]fr' "Fraktur" "isMath()" erA
-\mathfrak{`!p snip.rv=match.group(0)[0]`}
-endsnippet
+# snippet '[a-zA-Z]fr' "Fraktur" "isMath()" erA
+# \mathfrak{`!p snip.rv=match.group(0)[0]`}
+# endsnippet
 
 snippet '[a-zA-Z]til' "Tilde" "isMath()" erA
 \tilde{`!p snip.rv=match.group(0)[0]`}
@@ -764,9 +826,9 @@ snippet '[a-zA-Z]hat' "Hat" "isMath()" erAw
 \hat{`!p snip.rv=match.group(0)[0]`}
 endsnippet
 
-snippet '([a-zA-Z]{1,2})LA' "Lie Algebra" "isMath()" erA
-\mathfrak{`!p snip.rv=match.group(1)`}${2:_{\mathbb{C}}}(${1:\mathcal{M}})$0
-endsnippet
+# snippet '([a-zA-Z]{1,2})LA' "Lie Algebra" "isMath()" erA
+# \mathfrak{`!p snip.rv=match.group(1)`}${2:_{\mathbb{C}}}(${1:\mathcal{M}})$0
+# endsnippet
 
 snippet | "such that" "isMath()" eAw
 \suchthat
@@ -827,3 +889,65 @@ snippet "([a-zA-Z0])(,\.|\.,)" "Vector postfix" "isMath()" eriA
 \vb{`!p snip.rv=match.group(1)`}
 endsnippet
 
+
+# Evaluate expression with sympy as backend
+snippet sympy "sympy block " w
+sympy $1 sympy$0
+endsnippet
+
+priority 10000
+snippet 'sympy(.*)sympy' "evaluate sympy" wr
+`!p
+from sympy import *
+x, y, z, t = symbols('x y z t')
+k, m, n = symbols('k m n', integer=True)
+f, g, h = symbols('f g h', cls=Function)
+init_printing()
+snip.rv = eval('latex(' + match.group(1).replace('\\', '') \
+    .replace('^', '**') \
+    .replace('{', '(') \
+    .replace('}', ')') + ')')
+`
+endsnippet
+
+####################### Experimental ############
+
+# Evaluate expression with Mathematica as backend
+priority 1000
+snippet math "mathematica block" w
+math $1 math$0
+endsnippet
+
+priority 10000
+snippet 'math(.*)math' "evaluate mathematica" wr
+`!p
+import subprocess
+code = 'ToString[' + match.group(1) + ', TeXForm]'
+snip.rv = subprocess.check_output(['wolframscript', '-code', code])
+`
+endsnippet
+
+
+# New snippets
+snippet vec "vector" "isMath()" eAw
+\\vec{$1}$0
+endsnippet
+
+snippet cdot "cdot" Aw
+\\cdot $0
+endsnippet
+
+snippet equiv "equiv" Aw
+\\equiv $0
+endsnippet
+
+# Matrix
+snippet mat "smart matrix environment"
+\\begin{${1:p/b/v/V/B/small}matrix}
+${0:${VISUAL}}
+\\end{$1matrix}
+endsnippet
+
+snippet nn "nonumber"
+\nonumber $0
+endsnippet
