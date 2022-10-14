@@ -207,6 +207,7 @@ Plug 'aymericbeaumet/vim-symlink'                      " follow symlinks
 source $HOME/.config/nvim/rc/nerdtree.vim              " file manager
 Plug 'chiedo/vim-case-convert'                         " camel to snake case and back
 Plug 'tpope/vim-obsession'                             " accompaniment to tmux-resurrect
+source $HOME/.config/nvim/rc/fswitch.vim               " switch between cpp/hpp files
 " ============================
 
 call plug#end()
