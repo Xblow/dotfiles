@@ -1,0 +1,31 @@
+{
+    "workbench.colorTheme": "Dracula",
+    "vim.easymotion": true,
+    "vim.enableNeovim": true,
+    "vim.neovimPath": "/usr/bin/nvim",
+    "terminal.integrated.commandsToSkipShell": [
+        "-workbench.action.quickOpen",
+        "-actions.find"
+    ],
+    "editor.inlayHints.enabled": "offUnlessPressed",
+    "vim.handleKeys": {
+        "<C-n>": true,
+        "<C-t>": false,
+        "<C-k>": false,
+        "<C-d>": true,
+        "<C-s>": false,
+        "<C-z>": false,
+    },
+    "vim.commandLineModeKeyBindings": [],
+    "window.openFoldersInNewWindow": "on",
+    "editor.wordWrap": "on",
+    "explorer.confirmDelete": false,
+    "vim.replaceWithRegister": true,
+    "vim.useSystemClipboard": true,
+    "editor.fontFamily": "'Fira Code',  'monospace', monospace",
+    "editor.fontSize": 16,
+    "zig.initialSetupDone": false,
+    "[zig]": {
+        "editor.formatOnSave": false
+    }
+}
