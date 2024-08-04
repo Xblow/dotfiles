@@ -1,0 +1,50 @@
+// Place your key bindings in this file to override the defaultsauto[]
+[
+    {
+        "key": "ctrl+j",
+        "command": "workbench.action.focusActiveEditorGroup",
+    },
+    {
+        "key": "ctrl+j",
+        "command": "workbench.action.terminal.focus",
+        "when": "!terminalFocus"
+    },
+
+    // {
+    //     "key": "shift+alt+l",
+    //     "command": "editor.action.formatDocument.none",
+    //     "when": "editorTextFocus && !editorHasDocumentFormattingProvider && !editorReadonly && !editorHasSelection"
+    // },
+    {
+        "key": "shift+alt+l",
+        "command": "editor.action.formatDocument",
+        "when": "editorHasDocumentFormattingProvider && editorTextFocus && && !editorReadonly && !editorHasSelection"
+    },
+    {
+        "key": "shift+alt+l",
+        "command": "editor.action.formatSelection.multiple",
+        "when": "editorHasDocumentFormattingProvider && editorTextFocus && && !editorReadonly && editorHasSelection"
+    },
+    {
+        "key": "alt+z",
+        "command": "workbench.action.navigateBackInNavigationLocations"
+    },
+    {
+        "key": "ctrl+n",
+        "command": "workbench.action.files.newUntitledFile",
+        "when": "Never"
+    },
+    {
+        "key": "ctrl+n",
+        "command": "-workbench.action.files.newUntitledFile"
+    },
+    {
+        "key": "ctrl+k ctrl+alt+s",
+        "command": "git.stageSelectedRanges"
+    },
+    {
+        "key": "ctrl+k ctrl+alt+s",
+        "command": "-git.stageSelectedRanges",
+        "when": "isInDiffEditor"
+    }
+]
